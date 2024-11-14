@@ -16,7 +16,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    
+
     /*<html lang="en" className={`${GeistSans.variable}`}>
     <body className="bg-yellow-300">
         <div className="bg-repeat"></div>
@@ -43,11 +43,12 @@ export default function RootLayout({
     <html lang="en">
       <body className="bg-yellow-300">
         <SignedOut>
-
           <SignInButton/>
         </SignedOut>
+        
         <SignedIn>
           <UserButton/>
+          <UploadThingButton></UploadThingButton>
         </SignedIn>
    <svg
     xmlns="http://www.w3.org/2000/svg"
