@@ -3,7 +3,7 @@ import { db } from "./db";
 import { auth } from "@clerk/nextjs/server";
 
 type Image = {
-    id: Number;
+    id: number;
     name: string;
     url: string;
     userId: string;
