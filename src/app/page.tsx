@@ -25,8 +25,8 @@ export default async function HomePage() {
   return (
     <main className="object-center">
       <div className="object-center"> 
-        {images != null && images.map((image, index) =>(
-          <div key={image.id} className="w-48 flex-col">
+        {images?.map((image, index) =>(
+          <div key={index} className="w-48 flex-col">
             <img src={image.url}/>
             <div>{image.name}</div>
       </div>
