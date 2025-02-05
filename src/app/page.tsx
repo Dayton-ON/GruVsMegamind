@@ -1,6 +1,7 @@
 import Link from "next/link";
 //import { db } from "~/server/db";
 import { getMyImages } from "~/server/queries"
+import MyButton from "./MyButton";
 
 /*const mockUrls = [
   "https://utfs.io/f/9a13ba76-f28f-489d-ac34-73ad87bcb692-5cfjin.jpg",
@@ -32,6 +33,7 @@ export default async function HomePage() {
       </div>
       ))}
       </div>
+      <MyButton></MyButton>
     </main>
   );
 }

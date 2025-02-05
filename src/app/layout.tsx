@@ -52,7 +52,7 @@ export default function RootLayout({
         </SignedIn>
    <svg
     xmlns="http://www.w3.org/2000/svg"
-    className="h-6 w-6"
+    className="h-6 w-6 object-center"
     fill="bg-amber-400"
     viewBox="0 0 24 24"
     stroke="currentcolor">
