@@ -1,39 +1,128 @@
-import Link from "next/link";
-//import { db } from "~/server/db";
-import { getMyImages } from "~/server/queries"
-import MyButton from "./MyButton";
+"use client";
 
-/*const mockUrls = [
-  "https://utfs.io/f/9a13ba76-f28f-489d-ac34-73ad87bcb692-5cfjin.jpg",
-  "https://utfs.io/f/5e6dd6dc-d49e-4a33-b929-0ec1a8f47e17-ifz351.webp",
-  "https://utfs.io/f/ea948937-224f-4e04-9ec5-e04d2de54c4c-ilbysz.webp",
-  "https://utfs.io/f/61470a98-cc6a-4ca6-b287-e6235d99aabf-if1agd.webp",
-  "https://utfs.io/f/4b11d7e4-71d7-4443-acc4-6964743273b5-inbbhk.webp",
-  "https://utfs.io/f/7dda33c1-745d-4201-a229-501e2cb1bf21-in70d9.webp"
-];
+import { useState, ChangeEvent, useEffect } from "react";
+import uploadData from "./api/upload-stuff/upload";
+import { useRouter } from "next/navigation";
 
-const mockImages = mockUrls.map((url, index) =>({
-  id: index + 1,
-  url,
-}))
-*/
+/*type ReturnData = {
+  message: string;
+  error?: string;
+};
 
-export default async function HomePage() {
-  const images = await getMyImages().catch((error) => {
-    console.error(error);
-    return null;
-  });
-  return (
-    <main className="object-center">
-      <div className="object-center"> 
-        {images?.map((image, index) =>(
-          <div key={index} className="w-48 flex-col">
-            <img src={image.url}/>
-            <div>{image.name}</div>
-      </div>
-      ))}
-      </div>
-      <MyButton></MyButton>
-    </main>
-  );
-}
+
+export default function HomePage() {
+    const [text, setText] = useState<string>(""); // To track the input text
+    const [loading, setLoading] = useState<boolean>(false); // To handle loading state
+    const [error, setError] = useState<string | null>(null); // To show any error messages
+    const [successMessage, setSuccessMessage] = useState<string | null>(null); // To show success message
+  
+    const handleTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+      setText(e.target.value);
+    };
+  
+    const handleButtonClick = async () => {
+      if (text.trim() === "") {
+        alert("Please enter some text.");
+        return;
+      }
+  
+      setLoading(true); // Start loading
+  
+      try {
+        const response = await fetch("/api/upload-stuff", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",  // Use JSON for request body
+            accept: 'application/json',
+          },
+          body: JSON.stringify({
+            content: text,
+          }),
+        });
+  
+        const data = await response.json() as ReturnData;
+  
+        if (response.ok) {
+          setSuccessMessage(data.message); // Show success message
+          setText(""); // Clear input
+          setError(null); // Reset error state
+        } else {
+          setError(data.error || "An unknown error occurred");
+        }
+      } catch (error) {
+        console.error("Error uploading text:", error);
+        setError("An error occurred while uploading the text.");
+      } finally {
+        setLoading(false); // End loading state
+      }
+    };
+  
+    return (
+      <main className="min-h-screen flex justify-center items-center bg-gray-100 p-4">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+          <h1 className="text-2xl font-semibold text-center mb-4">Upload Text</h1>
+          
+          //Display any error message
+          {error && <div className="alert alert-error mb-4"><span>{error}</span></div>}
+  
+          //Display success message
+          {successMessage && <div className="alert alert-success mb-4"><span>{successMessage}</span></div>}
+  
+          <input
+            type="text"
+            value={text}
+            onChange={handleTextChange}
+            placeholder="Enter text here"
+            className="input input-bordered w-full mb-4"
+          />
+  
+          <button 
+            onClick={handleButtonClick}
+            className="btn btn-primary w-full"
+            disabled={loading} // Disable button during loading
+          >
+            {loading ? "Uploading..." : "Upload Text"}
+          </button>
+        </div>
+      </main>
+    );
+  }*/
+
+    export default function UploadForm() {
+      const [title, setTitle] = useState("");
+      const [content, setContent] = useState("");
+      const router = useRouter();
+    
+      useEffect(() => {
+        // This hook will run after the component is mounted on the client side
+        // Any code that interacts with the browser (e.g., navigation, DOM manipulation) should go here
+      }, []); // Empty dependency array ensures it runs only once, after initial render
+    
+      const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const result = await uploadData(title, content);
+        console.log(result); // Handle the result as needed
+        router.push("/"); // Redirect to the home page after submission, not needed but good to have as example
+      };
+    
+      return (
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title"
+            required
+          />
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Content"
+            required
+          />
+          <button type="submit">Upload</button>
+        </form>
+      );
+    }
+
+  

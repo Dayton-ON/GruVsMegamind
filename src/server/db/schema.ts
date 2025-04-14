@@ -4,10 +4,13 @@
 import { sql } from "drizzle-orm";
 import {
   index,
+  integer,
   pgTableCreator,
-  serial,
+  pgTable,
+  text,
   timestamp,
   varchar,
+  serial,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -18,40 +21,28 @@ import {
  */
 export const createTable = pgTableCreator((name) => `programming2projectdon_${name}`);
 
-export const images = createTable(
-  "image",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }).notNull(),
-    url: varchar("url", {length:1024}).notNull(),
-
-    userId: varchar("userId", {length: 256}).notNull(),
-
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
-
 export const posts = createTable(
   "post",
   {
     id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
+    title: varchar("title", { length: 256 }).notNull(),
     content: varchar("content", { length: 256 }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
   },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.content),
-  })
 );
+
+/*export const textSchema = {
+  table: 'texts',
+  fields: {
+    id: { type: 'integer', primaryKey: true, autoIncrement: true },
+    field_name: { type: 'string', notNull: true },
+    value: { type: 'text', notNull: true },
+  },
+*/
+
+
+// Define your schema using Drizzle ORM's helpers
+//export type InsertPost = typeof textSchema.$inferInsert;
+//export type SelectPost = typeof textSchema.$inferSelect;
